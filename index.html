@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HTTP Status Codes — 60s Animated Demo with Voice</title>
+  <style>
+    :root{
+      --bg:#0f1720;--card:#0b1220;--muted:#9aa6b2;--accent:#6ee7b7;--accent-2:#60a5fa;--glass:rgba(255,255,255,0.03);
+      --sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:#071024;font-family:var(--sans);color:#e6eef6}
+    .stage{width:360px;height:640px;margin:28px auto;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:0 10px 40px rgba(2,6,23,0.7),inset 0 1px 0 rgba(255,255,255,0.02);position:relative;border:1px solid rgba(255,255,255,0.03)}
+    header{position:absolute;top:12px;left:12px;right:12px;display:flex;align-items:center;justify-content:space-between;z-index:10}
+    .logo{display:flex;gap:8px;align-items:center}.logo .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}.logo .txt{font-weight:600;font-size:13px;color:var(--muted)}
+    .progress-wrap{height:6px;background:transparent;border-radius:999px;overflow:hidden;flex:1;margin-left:12px;margin-right:8px}
+    .progress{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:999px;transition:width 0.3s linear}
+    .content{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:72px 28px 56px;flex-direction:column;gap:14px}
+    .card{width:100%;height:76%;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:14px;padding:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.02)}
+    .scene-title{font-size:18px;font-weight:700;margin-bottom:8px}.scene-sub{font-size:14px;color:var(--muted);margin-bottom:14px}
+    .big-number{font-weight:900;font-size:72px;letter-spacing:2px;margin:6px 0}.big-desc{font-size:16px;font-weight:600}
+    .examples{display:flex;gap:6px;margin-top:12px}.chip{background:var(--glass);padding:8px 10px;border-radius:999px;font-weight:600;font-size:13px;color:var(--muted);display:inline-flex;gap:8px;align-items:center}
+    .chip .ok{font-weight:800;color:var(--accent)}.chip .warn{font-weight:800;color:#fca5a5}
+    .info .big-number{color:#93c5fd}.success .big-number{color:#6ee7b7}.redir .big-number{color:#fbbf24}.client .big-number{color:#fb7185}.server .big-number{color:#f97316}
+    footer{font-size:12px;color:var(--muted);position:absolute;bottom:12px;left:12px;right:12px;text-align:center}
+    .caption{position:absolute;left:16px;right:16px;bottom:66px;background:rgba(2,6,23,0.6);padding:10px 14px;border-radius:10px;color:#dbeafe;font-weight:600;text-align:center;font-size:13px}
+    .section{position:absolute;inset:72px 28px 56px;display:flex;align-items:center;justify-content:center;flex-direction:column;opacity:0;transform:scale(0.98);transition:all 350ms cubic-bezier(.2,.9,.25,1)}
+    .section.show{opacity:1;transform:scale(1)}
+    .cta{margin-top:12px;padding:8px 12px;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#01203a;font-weight:700;border:none;cursor:pointer}
+    .controls{position:absolute;top:12px;right:14px;display:flex;gap:8px}.btn{background:rgba(255,255,255,0.03);padding:6px;border-radius:8px;font-weight:700;border:1px solid rgba(255,255,255,0.025);cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <header>
+      <div class="logo"><div class="dot"></div><div class="txt">HTTP QuickBits</div></div>
+      <div class="progress-wrap"><div id="progress" class="progress"></div></div>
+      <div class="controls"><button id="replay" class="btn">⟲</button></div>
+    </header>
+    <div class="content">
+      <div class="card">
+        <div class="section intro show" id="section-intro">
+          <div class="scene-title">HTTP Status Codes</div>
+          <div class="scene-sub">What do numbers like 404 & 500 mean?</div>
+          <div class="big-number">Decode in 60s</div>
+          <button class="cta" id="startBtn">Play with Voice</button>
+        </div>
+        <div class="section info" id="section-info">
+          <div class="scene-title">Informational (100–199)</div><div class="big-number">1xx</div><div class="big-desc">Server received request</div>
+        </div>
+        <div class="section success" id="section-success">
+          <div class="scene-title">Success (200–299)</div><div class="big-number">200</div><div class="big-desc">OK — request succeeded</div>
+        </div>
+        <div class="section redir" id="section-redirect">
+          <div class="scene-title">Redirection (300–399)</div><div class="big-number">3xx</div><div class="big-desc">Resource moved</div>
+        </div>
+        <div class="section client" id="section-client">
+          <div class="scene-title">Client Errors (400–499)</div><div class="big-number">4xx</div><div class="big-desc">Bad Request or Not Found</div>
+        </div>
+        <div class="section server" id="section-server">
+          <div class="scene-title">Server Errors (500–599)</div><div class="big-number">5xx</div><div class="big-desc">Server-side problem</div>
+        </div>
+      </div>
+      <div class="caption" id="caption">Click play to start narration</div>
+    </div>
+    <footer>Screen-record or export to CapCut • Made with ❤️</footer>
+  </div>
+  <script>
+    const timeline=[
+      {id:'section-intro',start:0,duration:5,text:'Ever seen numbers like 404 or 500? Let\'s decode HTTP status codes in 60 seconds!'},
+      {id:'section-info',start:5,duration:5,text:'One hundred series means informational. The server says, got your request, keep going.'},
+      {id:'section-success',start:10,duration:10,text:'Two hundred series means success. Two hundred OK, all good. Two hundred one created, new resource made. Two hundred four, no content but successful.'},
+      {id:'section-redirect',start:20,duration:10,text:'Three hundred series means redirection. Three hundred one moved permanently. Three hundred two temporary redirect. Three hundred four not modified, use your cache.'},
+      {id:'section-client',start:30,duration:15,text:'Four hundred series means client errors. Four hundred bad request, four hundred one unauthorized, four hundred three forbidden, and four hundred four not found.'},
+      {id:'section-server',start:45,duration:10,text:'Five hundred series means server errors. Five hundred internal server error, five hundred two bad gateway, five hundred three service unavailable.'},
+      {id:'section-intro',start:55,duration:5,text:'That\'s the quick tour of HTTP codes. Follow for more tech in sixty seconds!'}
+    ];
+    const totalDuration=60;
+    let voiceQueue=[];let synth=window.speechSynthesis;
+
+    function speak(text){
+      if(!synth)return;
+      const u=new SpeechSynthesisUtterance(text);
+      u.lang='en-US';u.rate=1.05;u.pitch=1.0;u.volume=1.0;
+      synth.speak(u);
+    }
+    function stopVoice(){if(synth){synth.cancel();}}
+
+    function setActive(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('show'));const el=document.getElementById(id);if(el)el.classList.add('show');}
+    function setCaption(t){document.getElementById('caption').innerText=t;}
+    function setProgress(p){document.getElementById('progress').style.width=Math.max(0,Math.min(100,p))+'%';}
+
+    function playOnce(){stopVoice();const start=Date.now();
+      timeline.forEach(item=>{
+        setTimeout(()=>{setActive(item.id);setCaption(item.text);speak(item.text);},item.start*1000);
+      });
+      const prog=setInterval(()=>{
+        const elapsed=(Date.now()-start)/1000;setProgress((elapsed/totalDuration)*100);
+        if(elapsed>=totalDuration){clearInterval(prog);setProgress(100);setCaption('Done! Replay to listen again.');}
+      },100);
+    }
+
+    document.getElementById('startBtn').addEventListener('click',()=>{playOnce();});
+    document.getElementById('replay').addEventListener('click',()=>{setProgress(0);setCaption('Replaying...');playOnce();});
+  </script>
+</body>
+</html>
